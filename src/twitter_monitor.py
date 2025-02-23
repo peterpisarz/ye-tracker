@@ -1,12 +1,11 @@
 # src/twitter_monitor.py
 import tweepy
-import re
 from config.config import Config
 
 class TwitterMonitor(tweepy.StreamingClient):
     def __init__(self, callback):
         super().__init__(Config.BEARER_TOKEN)
-        self.callback = callback  # Function to call with detected address
+        self.callback = callback
 
     def on_tweet(self, tweet):
         if tweet.author_id == Config.KANYE_USER_ID:
@@ -22,5 +21,8 @@ class TwitterMonitor(tweepy.StreamingClient):
 
 def start_monitor(callback):
     monitor = TwitterMonitor(callback)
-    monitor.add_rules(tweepy.StreamRule("from:ye"))
+    print(f'Monitor: {monitor}')
+    print("Adding rule...")
+    response = monitor.add_rules(tweepy.StreamRule("from:ye"))
+    print(f"Rule response: {response}")
     monitor.filter()
